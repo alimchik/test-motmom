@@ -1,36 +1,69 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 
+import Field from './Field';
+
 import './Form.scss';
 
 @inject('store')
 @observer
 class Form extends React.Component {
 
+  state = {
+    nameErr: null,
+  }
+
   onChangeHandler = (e) => {
     this.props.store.updateInputsForm(e.target.value, e.target.name);
   }
 
+  handleOnChange = ({ name, value, isRequired }) => {
+    if (isRequired && value === '') {
+      this.handleOnErrorChange(`${name}Err`, 'Это поле обязательно к заполнению');
+    } else {
+      this.handleOnErrorChange(`${name}Err`, '');
+    }
+
+    this.props.store.updateInputsForm(value, name);
+  }
+
+  handleOnErrorChange = (key, value) => this.setState({ [key]: value })
+
   submitHandler = (e) => {
     e.preventDefault();
-    this.props.store.addProduct();
+
+    const errKeys = Object.keys(this.state);
+
+    errKeys.forEach(key => {
+      if (this.state[key] !== '') {
+        this.handleOnErrorChange(key, 'Это поле обязательно к заполнению');
+      }
+    });
+
+    if (errKeys.every(key => this.state[key] === '')) {
+      this.props.store.addProduct();
+    }
   }
 
   render() {
 
     const { formInputs } = this.props.store;
+    const { nameErr } = this.state;
 
     return (
       <form onSubmit={this.submitHandler} className='form'>
-        <div className='wrap'>
-          <label>Название товара</label>
-          <input name='name'
-                 type='text'
-                 placeholder='Название товара'
-                 value={formInputs.name}
-                 onChange={this.onChangeHandler}
-          />
-        </div>
+        <Field
+          name='Название товара'
+          placeholder='Введите строку'
+          value={formInputs.name}
+          error={nameErr}
+          onChange={value => this.handleOnChange({
+            name: 'name',
+            value: value,
+            isRequired: true
+          })}
+        />
+
         <div className='wrap'>
           <label>Количество товара(шт)</label>
           <input name='count' 

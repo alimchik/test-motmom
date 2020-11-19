@@ -1,0 +1,41 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px;
+
+
+  button {
+    border-radius: 5px;
+    border: none;
+    background: #24e307;
+    color: #fff;
+    height: 30px;
+    font-size: 16px;
+
+    &:focus {
+      outline:none;
+    }
+  }
+
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    padding: 0 10px;
+  }
+
+  label {
+    margin-bottom: 5px;
+  }
+
+  input {
+    outline: 0;
+    background: #dedcdc;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+}

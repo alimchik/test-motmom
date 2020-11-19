@@ -1,0 +1,5 @@
+{
+  "port": 5000,
+  "mongoUri": "mongodb+srv://artyom:19252630a@cluster0.yfmsz.azure.mongodb.net/test-motmom?retryWrites=true&w=majority",
+  "jwtSecret": "test motmom"
+}

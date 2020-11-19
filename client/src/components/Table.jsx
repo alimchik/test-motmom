@@ -64,12 +64,10 @@ class Table extends React.Component {
   render() {
     const { products} = this.props.store;
     return (
-      <section className="table-section">
-        <div className="container">
+      <section className="table-section container">
         {
           this.renderTable(products)
         }
-        </div>
       </section>
     )
   }

@@ -2,7 +2,7 @@ import { decorate, observable, action } from 'mobx';
 import axios from 'axios';
 
 class Auth {
-  isAuthorized = false;
+  isAuthorized = true;
   inputs = {
    email: '',
    password: ''

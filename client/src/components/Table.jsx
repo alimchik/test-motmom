@@ -8,6 +8,22 @@ import './Table.scss';
 @observer
 class Table extends React.Component {
 
+  formatDate (date) {
+
+    let date2 = new Date(date);
+
+    let dd = date2.getDate();
+    if (dd < 10) dd = '0' + dd;
+  
+    let mm = date2.getMonth() + 1;
+    if (mm < 10) mm = '0' + mm;
+  
+    let yy = date2.getFullYear();
+    if (yy < 10) yy = '0' + yy;
+  
+    return dd + '.' + mm + '.' + yy;
+  }
+
   renderTable (products) {
     if (products.length === 0) {
       return (
@@ -35,7 +51,7 @@ class Table extends React.Component {
                   <Cell nameField='name' valueField={item.name} id={item._id} />
                   <Cell nameField='count' valueField={item.count} id={item._id} />
                   <Cell nameField='price' valueField={item.price} id={item._id} />
-                  <Cell nameField='date_add' valueField={item.date_add} id={item._id} />
+                  <Cell nameField='date_add' valueField={this.formatDate(item.date_add)} id={item._id} />
                   <td onClick={this.removeProductHandler(item._id)}>
                     <i className="far fa-trash-alt rm-product"></i>
                   </td>
@@ -62,7 +78,7 @@ class Table extends React.Component {
   }
 
   render() {
-    const { products} = this.props.store;
+    const { products } = this.props.store;
     return (
       <section className="table-section container">
         {

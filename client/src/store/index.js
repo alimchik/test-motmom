@@ -1,4 +1,5 @@
 import { decorate, observable, action } from 'mobx';
+import * as _ from 'lodash';
 import axios from 'axios';
 
 class Store {
@@ -17,6 +18,10 @@ class Store {
     const qweryParams = param ? `?name=${param}` : '';
     const url = new URL(qweryParams, 'http://localhost:5000/api/product');
     try {
+      const a =_.debounce((e) => {
+        console.log('dasdasd')
+      },1000)
+      console.log(a)
       result = await axios.get(url);
     } catch (e) {
       console.log(e);
@@ -34,6 +39,8 @@ class Store {
     this.getProducts(value);
   }
 
+  getProducts = _.debounce(this.getProducts, 200);
+
   addProduct = async () => {
     let status = null
     try {
@@ -43,8 +50,8 @@ class Store {
       console.log(e)
     }
 
-    console.log(status)
     if (status === 201) {
+      this.openModal();
       this.getProducts();
     }
   }

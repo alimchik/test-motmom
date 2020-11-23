@@ -15,7 +15,12 @@ class Header extends React.Component {
   }
   
   openModalHandler = () => {
-    this.props.store.openModal();
+    this.props.store.changeModalVisibility();
+  }
+
+  removeProduct = (e) => {
+    e.preventDefault()
+    this.props.store.removeProductMulti()
   }
 
   render() {
@@ -34,7 +39,8 @@ class Header extends React.Component {
                    onChange={this.onChangeHandler}                 
             />
           </div>
-          <button onClick={this.openModalHandler}>Добавить товар</button>
+          <button className='rmv' onClick={this.removeProduct}>Удалить товары</button>
+          <button className='add' onClick={this.openModalHandler}>Добавить товар</button>
         </div>
         <Modal title='Добавить товар' isOpen={isOpen} openModalHandler={this.openModalHandler}>
           <Form />

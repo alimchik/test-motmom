@@ -33,10 +33,21 @@ router.get('/', async (req, res) => {
   res.status(200).json(prdct);
 });
 
-// /api/product/:id
-router.delete('/:id', async (req, res) => {
+
+/*router.delete('/:id', async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+    await product.remove();
+  } catch (e) {
+    res.status(500).json({ message: 'что-то пошло не так' });
+  }
+  res.status(200).json({ message: 'Запись успешно удалена' });
+});*/
+
+// /api/product/
+router.delete('/', async (req, res) => {
+  try {
+    const product = Product.find( { _id: { $in: req.body.data } } );
     await product.remove();
   } catch (e) {
     res.status(500).json({ message: 'что-то пошло не так' });

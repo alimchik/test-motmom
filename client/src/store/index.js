@@ -11,23 +11,20 @@ class Store {
     count: '',
     price: '',
     date_add: ''
-  }
+  };
+  itemChecked = {};
 
   getProducts = async (param ='') => {
     let result = [];
     const qweryParams = param ? `?name=${param}` : '';
     const url = new URL(qweryParams, 'http://localhost:5000/api/product');
     try {
-      const a =_.debounce((e) => {
-        console.log('dasdasd')
-      },1000)
-      console.log(a)
       result = await axios.get(url);
     } catch (e) {
       console.log(e);
     }
     this.products = result.data
-    //console.log('продукты',this.products)
+
   }
 
   updateInputsForm = (value, name) => {
@@ -37,6 +34,10 @@ class Store {
   updateInput = (value) => {
     this.inputValue = value;
     this.getProducts(value);
+  }
+
+  checkItem = (id, check) => {
+    this.itemChecked[id] =check;
   }
 
   getProducts = _.debounce(this.getProducts, 200);
@@ -51,11 +52,15 @@ class Store {
     }
 
     if (status === 201) {
-      this.openModal();
+      this.formInputs.name=''
+      this.formInputs.count=''
+      this.formInputs.price=''
+      this.formInputs.date_add=''
+      this.changeModalVisibility();
       this.getProducts();
     }
   }
-
+  /*
   removeProduct = async (id) => {
     let result = [];
     try{
@@ -68,9 +73,33 @@ class Store {
     if (result.status) {
       this.getProducts(this.inputValue);
     }
+  }*/
+
+  removeProductMulti = () => {
+    const arrIds = Object.keys(this.itemChecked).filter(item => this.itemChecked[item]);
+    this.removeProduct(arrIds);
   }
 
-  openModal = () => {
+  removeProduct = async (ids) => {
+    let result = [];
+    try{
+      //result = await axios.delete('http://localhost:5000/api/product', { data: { foo: "bar" }, headers: { "Content-Type": "application/json" } });
+      result = await axios({
+        method: 'DELETE',
+        url: 'http://localhost:5000/api/product',
+        data: {
+          data: ids 
+        }
+      })
+    } catch (e) {
+      console.log(e);
+    }
+    if (result.status) {
+      this.getProducts(this.inputValue);
+    }
+  }
+
+  changeModalVisibility = () => {
     this.isOpen = !this.isOpen;
   }
 
@@ -92,6 +121,7 @@ Store = decorate(Store, {
   inputValue: observable,
   isOpen: observable,
   formInputs: observable,
+  itemChecked: observable,
   getProducts: action,
   updateInput: action,
   removeProduct: action,

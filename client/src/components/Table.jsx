@@ -8,20 +8,29 @@ import './Table.scss';
 @observer
 class Table extends React.Component {
 
+/*
+  state = {
+    itemChecked: {}
+  }*/
+
   formatDate (date) {
 
     let date2 = new Date(date);
 
     let dd = date2.getDate();
-    if (dd < 10) dd = '0' + dd;
+    dd = dd < 10 ? '0' + dd : dd;
   
     let mm = date2.getMonth() + 1;
-    if (mm < 10) mm = '0' + mm;
+    mm = mm < 10 ? '0' + mm : mm;
   
     let yy = date2.getFullYear();
-    if (yy < 10) yy = '0' + yy;
+    yy = yy < 10 ? '0' + yy : yy;
   
     return dd + '.' + mm + '.' + yy;
+  }
+
+  checkItem = (id) => (e) => {
+    this.props.store.checkItem(id, e.target.checked)
   }
 
   renderTable (products) {
@@ -36,6 +45,7 @@ class Table extends React.Component {
       <table className="products">
         <thead>
           <tr>
+            <th></th>
             <th>Название</th>
             <th>Количество(шт)</th>
             <th>Цена(руб)</th>
@@ -48,6 +58,9 @@ class Table extends React.Component {
             products.map((item) => {
               return (
                 <tr key={item._id}>
+                  <td>
+                    <input type="checkbox" onChange={this.checkItem(item._id)}/>
+                  </td>
                   <Cell nameField='name' valueField={item.name} id={item._id} />
                   <Cell nameField='count' valueField={item.count} id={item._id} />
                   <Cell nameField='price' valueField={item.price} id={item._id} />
@@ -73,7 +86,7 @@ class Table extends React.Component {
     e.preventDefault();
     let conf = window.confirm('Вы действительно хотите удалить товар?');
     if (conf) {
-      this.props.store.removeProduct(id);
+      this.props.store.removeProduct([id]);
     }
   }
 

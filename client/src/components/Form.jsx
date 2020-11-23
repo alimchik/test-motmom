@@ -17,9 +17,11 @@ class Form extends React.Component {
     this.props.store.updateInputsForm(e.target.value, e.target.name);
   }
 
-  handleOnChange = ({ name, value, isRequired }) => {
+  handleOnChange = ({ name, value, isRequired, type = 'string'}) => {
     if (isRequired && value === '') {
       this.handleOnErrorChange(`${name}Err`, 'Это поле обязательно к заполнению');
+    } if (type === 'number' && !Number(value)) {
+      this.handleOnErrorChange(`${name}Err`, 'Это поле должно быть числом');
     } else {
       this.handleOnErrorChange(`${name}Err`, '');
     }
@@ -49,6 +51,7 @@ class Form extends React.Component {
 
     const { formInputs } = this.props.store;
     const { nameErr } = this.state;
+    const disabledBtn = !!formInputs.name && !!formInputs.count && !!formInputs.price && !!formInputs.date_add;
 
     return (
       <form onSubmit={this.submitHandler} className='form'>
@@ -60,7 +63,8 @@ class Form extends React.Component {
           onChange={value => this.handleOnChange({
             name: 'name',
             value: value,
-            isRequired: true
+            isRequired: true,
+            type:'number'
           })}
         />
 
@@ -88,7 +92,10 @@ class Form extends React.Component {
                  onChange={this.onChangeHandler} 
           />
         </div>
-        <button onSubmit={this.submitHandler}>Добавить товар</button>
+        <button className={ disabledBtn ? 'active' : 'disabled' } 
+                onSubmit={this.submitHandler} 
+                disabled={!disabledBtn}
+        >Добавить товар</button>
       </form>
     )
   }

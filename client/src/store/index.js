@@ -1,4 +1,4 @@
-import { decorate, observable, action } from 'mobx';
+import { decorate, observable, action, computed } from 'mobx';
 import * as _ from 'lodash';
 import axios from 'axios';
 
@@ -60,20 +60,6 @@ class Store {
       this.getProducts();
     }
   }
-  /*
-  removeProduct = async (id) => {
-    let result = [];
-    try{
-      console.log(`http://localhost:5000/api/product/${id}`)
-      result = await axios.delete(`http://localhost:5000/api/product/${id}`);
-      
-    } catch (e) {
-      console.log(e);
-    }
-    if (result.status) {
-      this.getProducts(this.inputValue);
-    }
-  }*/
 
   removeProductMulti = () => {
     const arrIds = Object.keys(this.itemChecked).filter(item => this.itemChecked[item]);
@@ -83,7 +69,6 @@ class Store {
   removeProduct = async (ids) => {
     let result = [];
     try{
-      //result = await axios.delete('http://localhost:5000/api/product', { data: { foo: "bar" }, headers: { "Content-Type": "application/json" } });
       result = await axios({
         method: 'DELETE',
         url: 'http://localhost:5000/api/product',
@@ -114,6 +99,10 @@ class Store {
     console.log(result);
   }
 
+  get removedIds() {
+    return Object.keys(this.itemChecked).some(item => this.itemChecked[item] === true);
+  }
+
 }
 
 Store = decorate(Store, {
@@ -126,7 +115,8 @@ Store = decorate(Store, {
   updateInput: action,
   removeProduct: action,
   addProduct: action,
-  editProduct: action
+  editProduct: action,
+  removedIds: computed
 })
 
 export default new Store();

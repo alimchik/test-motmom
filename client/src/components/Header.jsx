@@ -39,8 +39,13 @@ class Header extends React.Component {
                    onChange={this.onChangeHandler}                 
             />
           </div>
-          <button className='rmv' onClick={this.removeProduct}>Удалить товары</button>
-          <button className='add' onClick={this.openModalHandler}>Добавить товар</button>
+          <div className="btnContainer">
+            <button className={this.props.store.removedIds ? 'rmvActive' : 'rmvDisabled'} 
+                    onClick={this.removeProduct}
+                    disabled={!this.props.store.removedIds}
+            >Удалить товары</button>
+            <button className='add' onClick={this.openModalHandler}>Добавить товар</button>
+          </div>
         </div>
         <Modal title='Добавить товар' isOpen={isOpen} openModalHandler={this.openModalHandler}>
           <Form />

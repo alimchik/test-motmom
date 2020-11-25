@@ -8,27 +8,6 @@ import './Table.scss';
 @observer
 class Table extends React.Component {
 
-/*
-  state = {
-    itemChecked: {}
-  }*/
-
-  formatDate (date) {
-
-    let date2 = new Date(date);
-
-    let dd = date2.getDate();
-    dd = dd < 10 ? '0' + dd : dd;
-  
-    let mm = date2.getMonth() + 1;
-    mm = mm < 10 ? '0' + mm : mm;
-  
-    let yy = date2.getFullYear();
-    yy = yy < 10 ? '0' + yy : yy;
-  
-    return dd + '.' + mm + '.' + yy;
-  }
-
   checkItem = (id) => (e) => {
     this.props.store.checkItem(id, e.target.checked)
   }
@@ -61,10 +40,10 @@ class Table extends React.Component {
                   <td>
                     <input type="checkbox" onChange={this.checkItem(item._id)}/>
                   </td>
-                  <Cell nameField='name' valueField={item.name} id={item._id} />
-                  <Cell nameField='count' valueField={item.count} id={item._id} />
-                  <Cell nameField='price' valueField={item.price} id={item._id} />
-                  <Cell nameField='date_add' valueField={this.formatDate(item.date_add)} id={item._id} />
+                  <Cell nameField='name' valueField={item.name} id={item._id} typeFild='text' />
+                  <Cell nameField='count' valueField={item.count} id={item._id} typeFild='text' />
+                  <Cell nameField='price' valueField={item.price} id={item._id} typeFild='text' />
+                  <Cell nameField='date_add' valueField={item.date_add} id={item._id} typeFild='date' />
                   <td onClick={this.removeProductHandler(item._id)}>
                     <i className="far fa-trash-alt rm-product"></i>
                   </td>

@@ -9,17 +9,27 @@
     border-collapse: collapse;
     text-align: left;
 
-    td {
-      padding: 10px; 
-      border-bottom: 1px solid #e8e9eb;
+    
+
+    thead {
+      background-color: #f0f0f0;
     }
 
     th {
       padding: 5px 10px;
     }
 
-    thead {
-      background-color: #f0f0f0;
+    tbody {
+      tr {
+        &:hover {
+          background-color: #e5ecf0;
+        }
+      }
+
+      td {
+        padding: 15px 10px; 
+        border-bottom: 1px solid #e8e9eb;
+      }
     }
     
     .rm-product {

@@ -1,7 +1,8 @@
 
 .container {
-  width: 1320px;
+  max-width: 1320px;
   margin: 0 auto;
+  overflow-x: auto;
   
   .titel {
     padding-top: 40px;
@@ -42,16 +43,39 @@
       }
 
     }
+    .btnContainer {
+      button {
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+        width: 180px;
+        height: 30px;
+        font-size: 16px;
+        
+        &.add {
+          background: #24e307;
+          cursor: pointer;
+        }
 
-    button {
-      border-radius: 5px;
-      border: none;
-      background: #24e307;
-      color: #fff;
-      width: 200px;
-      height: 30px;
-      font-size: 16px
-      
+        &.rmvActive {
+          background: #e41313;
+          cursor: pointer;
+        }
+  
+        &.rmvDisabled {
+          color: #8a8a8a;
+          background: #804e4e;
+        }
+  
+        &:focus {
+          outline:none;
+        }
+
+        &:first-child {
+          margin-right: 10px;
+        }
+        
+      }
     }
   }
 }

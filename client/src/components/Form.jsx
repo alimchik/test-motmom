@@ -11,6 +11,8 @@ class Form extends React.Component {
 
   state = {
     nameErr: null,
+    countErr: null,
+    priceErr: null,
   }
 
   onChangeHandler = (e) => {
@@ -20,7 +22,7 @@ class Form extends React.Component {
   handleOnChange = ({ name, value, isRequired, type = 'string'}) => {
     if (isRequired && value === '') {
       this.handleOnErrorChange(`${name}Err`, 'Это поле обязательно к заполнению');
-    } if (type === 'number' && !Number(value)) {
+    } if (type === 'number' && isRequired && !Number(value)) {
       this.handleOnErrorChange(`${name}Err`, 'Это поле должно быть числом');
     } else {
       this.handleOnErrorChange(`${name}Err`, '');
@@ -38,7 +40,7 @@ class Form extends React.Component {
 
     errKeys.forEach(key => {
       if (this.state[key] !== '') {
-        this.handleOnErrorChange(key, 'Это поле обязательно к заполнению');
+        this.handleOnErrorChange(key, this.state[key]);
       }
     });
 
@@ -50,7 +52,7 @@ class Form extends React.Component {
   render() {
 
     const { formInputs } = this.props.store;
-    const { nameErr } = this.state;
+    const { nameErr, countErr, priceErr } = this.state;
     const disabledBtn = !!formInputs.name && !!formInputs.count && !!formInputs.price && !!formInputs.date_add;
 
     return (
@@ -63,35 +65,53 @@ class Form extends React.Component {
           onChange={value => this.handleOnChange({
             name: 'name',
             value: value,
+            isRequired: true
+          })}
+          type='text'
+        />
+
+        <Field
+          name='Количество товра'
+          placeholder='шт'
+          value={formInputs.count}
+          error={countErr}
+          onChange={value => this.handleOnChange({
+            name: 'count',
+            value: value,
             isRequired: true,
             type:'number'
           })}
+          type='text'
         />
 
-        <div className='wrap'>
-          <label>Количество товара(шт)</label>
-          <input name='count' 
-                 type='text'
-                 value={formInputs.count}
-                 onChange={this.onChangeHandler}
-          />
-        </div>
-        <div className='wrap'>
-          <label>Стоимость товара(руб)</label>
-          <input name='price'
-                 type='text'
-                 value={formInputs.price}
-                 onChange={this.onChangeHandler} 
-          />
-        </div>
-        <div className='wrap'>
-          <label>Дата и время</label>
-          <input name='date_add'
-                 type='date'
-                 value={formInputs.date_add}
-                 onChange={this.onChangeHandler} 
-          />
-        </div>
+        <Field
+          name='Стоимость товара'
+          placeholder='руб.'
+          value={formInputs.price}
+          error={priceErr}
+          onChange={value => this.handleOnChange({
+            name: 'price',
+            value: value,
+            isRequired: true,
+            type:'number'
+          })}
+          type='text'
+        />
+
+        <Field
+          name='Дата и время'
+          placeholder=''
+          value={formInputs.date_add}
+          error={null}
+          onChange={value => this.handleOnChange({
+            name: 'date_add',
+            value: value,
+            isRequired: true,
+            type:'text'
+          })}
+          type='date'
+        />
+
         <button className={ disabledBtn ? 'active' : 'disabled' } 
                 onSubmit={this.submitHandler} 
                 disabled={!disabledBtn}

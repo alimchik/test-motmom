@@ -64,6 +64,7 @@ class Store {
   removeProductMulti = () => {
     const arrIds = Object.keys(this.itemChecked).filter(item => this.itemChecked[item]);
     this.removeProduct(arrIds);
+    this.itemChecked = {...{}};
   }
 
   removeProduct = async (ids) => {
@@ -100,6 +101,7 @@ class Store {
   }
 
   get removedIds() {
+    console.log(Object.entries(this.itemChecked));
     return Object.keys(this.itemChecked).some(item => this.itemChecked[item] === true);
   }
 

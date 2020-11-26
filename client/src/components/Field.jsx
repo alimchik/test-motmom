@@ -8,7 +8,7 @@ export default class Field extends Component {
   handleValueChange = e => this.props.onChange(e.target.value)
 
   render() {
-    const { value, name, placeholder, error } = this.props;
+    const { value, name, placeholder, error, type } = this.props;
 
     return (
       <label className='field'>
@@ -18,7 +18,7 @@ export default class Field extends Component {
 
         <input
           name={name}
-          type='text'
+          type={type}
           placeholder={placeholder}
           value={value}
           onChange={this.handleValueChange}

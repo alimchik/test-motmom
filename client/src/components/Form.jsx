@@ -20,14 +20,21 @@ class Form extends React.Component {
   }
 
   handleOnChange = ({ name, value, isRequired, type = 'string'}) => {
+    
     if (isRequired && value === '') {
       this.handleOnErrorChange(`${name}Err`, 'Это поле обязательно к заполнению');
-    } if (type === 'number' && isRequired && !Number(value)) {
-      this.handleOnErrorChange(`${name}Err`, 'Это поле должно быть числом');
     } else {
       this.handleOnErrorChange(`${name}Err`, '');
     }
 
+    if (type === 'number') {
+      if (isRequired && !Number(value)) {
+        this.handleOnErrorChange(`${name}Err`, 'Это поле должно быть числом');
+      } else {
+        this.handleOnErrorChange(`${name}Err`, '');
+      }
+    }
+    
     this.props.store.updateInputsForm(value, name);
   }
 

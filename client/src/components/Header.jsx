@@ -1,7 +1,8 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import Modal from './Modal';
-import Form from './Form';
+import { Link } from 'react-router-dom';
+//import Modal from './Modal';
+//import Form from './Form';
 
 import './Header.scss';
 
@@ -24,7 +25,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { inputValue, isOpen } = this.props.store;
+    const { inputValue/*, isOpen*/ } = this.props.store;
     return (
       <header className='container'>
         <div className='titel'>
@@ -44,12 +45,14 @@ class Header extends React.Component {
                     onClick={this.removeProduct}
                     disabled={!this.props.store.isSomeItemSelected}
             >Удалить товары</button>
-            <button className='add' onClick={this.openModalHandler}>Добавить товар</button>
+            {/*<button className='add' onClick={this.openModalHandler}>Добавить товар</button>*/}
+            <Link to='products/add' className='add'>Добавить товар</Link>
           </div>
         </div>
+        {/*
         <Modal title='Добавить товар' isOpen={isOpen} openModalHandler={this.openModalHandler}>
           <Form />
-        </Modal>
+        </Modal>*/}
       </header>
     )
   }

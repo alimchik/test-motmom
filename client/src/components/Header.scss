@@ -44,6 +44,7 @@
 
     }
     .btnContainer {
+      display: flex;
       button {
         border-radius: 5px;
         border: none;
@@ -75,6 +76,22 @@
           margin-right: 10px;
         }
         
+      }
+      a {
+        border-radius: 5px;
+        border: none;
+        color: #fff;
+        width: 180px;
+        height: 30px;
+        font-size: 16px;
+        display: inline-block;
+        text-decoration: none;
+        line-height: 31px;
+        text-align: center;
+        &.add {
+          background: #24e307;
+          cursor: pointer;
+        }
       }
     }
   }

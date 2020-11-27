@@ -40,9 +40,9 @@ class Header extends React.Component {
             />
           </div>
           <div className="btnContainer">
-            <button className={this.props.store.removedIds ? 'rmvActive' : 'rmvDisabled'} 
+            <button className={this.props.store.isSomeItemSelected ? 'rmvActive' : 'rmvDisabled'} 
                     onClick={this.removeProduct}
-                    disabled={!this.props.store.removedIds}
+                    disabled={!this.props.store.isSomeItemSelected}
             >Удалить товары</button>
             <button className='add' onClick={this.openModalHandler}>Добавить товар</button>
           </div>

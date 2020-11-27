@@ -8,8 +8,17 @@ import './Table.scss';
 @observer
 class Table extends React.Component {
 
+  state = {
+    checkedAll: false
+  }
+
+  checkItems = (e) => {
+    this.setState({checkedAll: e.target.checked});
+    this.props.store.checkItemAll(e.target.checked);
+  }
+
   checkItem = (id) => (e) => {
-    this.props.store.checkItem(id, e.target.checked)
+    this.props.store.checkItem(id, e.target.checked);
   }
 
   renderTable (products) {
@@ -24,7 +33,9 @@ class Table extends React.Component {
       <table className="products">
         <thead>
           <tr>
-            <th></th>
+            <th>
+              <input type="checkbox" onChange={this.checkItems} checked={this.state.checkedAll}/>
+            </th>
             <th>Название</th>
             <th>Количество(шт)</th>
             <th>Цена(руб)</th>
@@ -38,7 +49,7 @@ class Table extends React.Component {
               return (
                 <tr key={item._id}>
                   <td>
-                    <input type="checkbox" onChange={this.checkItem(item._id)}/>
+                    <input type="checkbox" onChange={this.checkItem(item._id)} checked={item.selected}/>
                   </td>
                   <Cell nameField='name' valueField={item.name} id={item._id} typeFild='text' />
                   <Cell nameField='count' valueField={item.count} id={item._id} typeFild='text' />

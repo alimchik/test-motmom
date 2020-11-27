@@ -12,7 +12,6 @@ class Store {
     price: '',
     date_add: ''
   };
-  itemChecked = {};
 
   getProducts = async (param ='') => {
     let result = [];
@@ -23,12 +22,17 @@ class Store {
     } catch (e) {
       console.log(e);
     }
-    this.products = result.data
+    
+    const result2 = result.data.map(item => {
+      item['selected'] = false
+      return item
+    })
 
+    this.products = result2
   }
 
   updateInputsForm = (value, name) => {
-    this.formInputs[name] =value;
+    this.formInputs[name] = value;
   }
 
   updateInput = (value) => {
@@ -37,7 +41,22 @@ class Store {
   }
 
   checkItem = (id, check) => {
-    this.itemChecked[id] =check;
+    const result = this.products.map(item => {
+      if(item._id === id) {
+        return { ...item, selected: check }
+      }
+      return item
+    })
+
+    this.products = [ ...result ]
+  }
+
+  checkItemAll = (check) => {
+    const result = this.products.map(item => {
+      return { ...item, selected: check }
+    })
+
+    this.products = [ ...result ]
   }
 
   getProducts = _.debounce(this.getProducts, 200);
@@ -62,9 +81,8 @@ class Store {
   }
 
   removeProductMulti = () => {
-    const arrIds = Object.keys(this.itemChecked).filter(item => this.itemChecked[item]);
+    const arrIds = this.products.filter(item => item.selected);
     this.removeProduct(arrIds);
-    this.itemChecked = {...{}};
   }
 
   removeProduct = async (ids) => {
@@ -100,9 +118,8 @@ class Store {
     console.log(result);
   }
 
-  get removedIds() {
-    console.log(Object.entries(this.itemChecked));
-    return Object.keys(this.itemChecked).some(item => this.itemChecked[item] === true);
+  get isSomeItemSelected() {
+    return this.products.some(item => item.selected === true )
   }
 
 }
@@ -114,11 +131,16 @@ Store = decorate(Store, {
   formInputs: observable,
   itemChecked: observable,
   getProducts: action,
+  updateInputsForm: action,
   updateInput: action,
-  removeProduct: action,
+  checkItem: action,
+  checkItemAll: action,
   addProduct: action,
+  removeProductMulti: action,
+  removeProduct: action,
+  changeModalVisibility: action,
   editProduct: action,
-  removedIds: computed
+  isSomeItemSelected: computed
 })
 
 export default new Store();

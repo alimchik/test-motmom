@@ -2,7 +2,8 @@ import { decorate, observable, action } from 'mobx';
 import axios from 'axios';
 
 class Auth {
-  isAuthorized = true;
+  isAuthorized = false;
+  user = {};
   inputs = {
    email: '',
    password: ''
@@ -13,29 +14,48 @@ class Auth {
   }
 
   registr = async () => {
-    const result = await axios.post('http://localhost:5000/api/auth/registr', this.inputs);
-    console.log(result);
+    try {
+      const result = await axios.post('http://localhost:5000/api/auth/registr', this.inputs);
+      if (result.status === 201) {
+        alert('Регистрация успешно прошла');
+      }
+    } catch(e) {
+      console.log(e.response.data.message)
+    }
   }
 
   login = async () => {
-    const result = await axios.post('http://localhost:5000/api/auth/login', this.inputs);
-    console.log(result);
-    if (result.status === 200) {
-      localStorage.setItem('userData', JSON.stringify({
-        userId: result.data.userId,
-        token: result.data.token
-      }));
-      this.isAuthorized = !this.isAuthorized;
+    try {
+      const result = await axios.post('http://localhost:5000/api/auth/login', this.inputs);
+      if (result.status === 200) {
+        localStorage.setItem('token', result.data.token);
+        this.setUser(result.data.user);
+      }
+    } catch(e) {
+      console.log(e.response.data.message)
     }
   }
 
+  setUser = (user) => {
+    this.user = { ...user };
+    this.isAuthorized = true;
+  }
+  
+  logout = () => {
+    localStorage.removeItem('token');
+    this.user = { ...{} };
+    this.isAuthorized = false;
+  }
 
-  autoLogin = () => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    if (userData) {
-      this.isAuthorized = !!userData.token;
+  autoLogin = async () => {
+    try {
+      const result = await axios.get('http://localhost:5000/api/auth/autologin', {headers: {Authorization:localStorage.getItem('token') }})
+      this.setUser(result.data.user);
+      localStorage.setItem('token', result.data.token)
+    } catch(e) {
+      console.log(e.response.data.message);
+      localStorage.removeItem('token');
     }
-    return
   }
 
 }

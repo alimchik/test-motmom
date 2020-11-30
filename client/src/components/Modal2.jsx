@@ -1,13 +1,21 @@
 import React from 'react';
 import { createPortal } from "react-dom";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import './Modal2.scss';
 
-export default class Modal2 extends React.Component {
+class Modal2 extends React.Component {
+
+  closeModal = (e) => {
+    const modalOverlay = document.querySelectorAll('.modalOverlay');
+    if (e.target === modalOverlay[0]){
+      this.props.history.push('/products');
+    }
+  }
+   
   render() {
     const { title, children } = this.props
     return createPortal(
-      <div className="modalOverlay">
+      <div className="modalOverlay" onClick={this.closeModal}>
         <div className="window">
           <div className="header">
             <div className="title">{title}</div>
@@ -24,3 +32,4 @@ export default class Modal2 extends React.Component {
     );
   }
 }
+export default  withRouter(Modal2);

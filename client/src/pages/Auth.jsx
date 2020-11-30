@@ -23,9 +23,11 @@ class Auth extends React.Component {
   render() {
 
     const { inputs } = this.props.auth;
+    const { titel, type } = this.props;
     return (
       <div className='containerr'>
         <div className='form-wrap'>
+          <h1>{titel}</h1>
           <div className='input-wrap'>
             <input name='email' 
                    type='email' 
@@ -41,8 +43,11 @@ class Auth extends React.Component {
             />
           </div>
           <div className='button-wrap'>
-            <button onClick={this.registrHandler} >Зарегистрироваться</button>
-            <button onClick={this.loginHandler} >Войти</button>
+            {
+              type === 'login' ?
+              <button onClick={this.loginHandler} >{titel}</button> :
+              <button onClick={this.registrHandler} >{titel}</button>
+            }
           </div>
         </div>
       </div>

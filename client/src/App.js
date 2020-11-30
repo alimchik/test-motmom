@@ -2,6 +2,7 @@ import React from 'react';
 import Products from './pages/Products';
 import Auth from './pages/Auth';
 import Modal2 from './components/Modal2';
+import Navbar from './components/Navbar';
 import Form from './components/Form';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
@@ -16,12 +17,13 @@ class App extends React.Component {
 
   render() {
     const { isAuthorized } = this.props.auth;
-    console.log(isAuthorized);
+    console.log('asdad',isAuthorized);
     return (
       <Router>
+          <Navbar isAuthorized={isAuthorized} />
           {
             isAuthorized ?
-              <div>  
+              <div className='App'>  
                 <Switch>
                   <Route path='/products'>
                     <Products />
@@ -35,10 +37,14 @@ class App extends React.Component {
                 </Route>
               </div>
             : <Switch>
-                <Route exact path='/auth'>
-                  <Auth />
+                <Route path='/registration'>
+                  <Auth titel='Регистрация' type='registration' />
                 </Route>
-                <Redirect to='/auth'/>
+                
+                <Route path='/login'>
+                  <Auth titel='Войти' type='login' />
+                </Route>
+                <Redirect to='/registration'/>
               </Switch>
           }
       </Router>

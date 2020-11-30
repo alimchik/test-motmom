@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom'
 
 import Field from './Field';
 
@@ -53,6 +54,7 @@ class Form extends React.Component {
 
     if (errKeys.every(key => this.state[key] === '')) {
       this.props.store.addProduct();
+      this.props.history.push('/products');
     }
   }
 
@@ -61,7 +63,7 @@ class Form extends React.Component {
     const { formInputs } = this.props.store;
     const { nameErr, countErr, priceErr } = this.state;
     const disabledBtn = !!formInputs.name && !!formInputs.count && !!formInputs.price && !!formInputs.date_add;
-
+    console.log(this.props)
     return (
       <form onSubmit={this.submitHandler} className='form'>
         <Field
@@ -128,4 +130,4 @@ class Form extends React.Component {
   }
 }
 
-export default Form;
+export default withRouter(Form);

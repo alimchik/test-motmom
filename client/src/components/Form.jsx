@@ -63,7 +63,6 @@ class Form extends React.Component {
     const { formInputs } = this.props.store;
     const { nameErr, countErr, priceErr } = this.state;
     const disabledBtn = !!formInputs.name && !!formInputs.count && !!formInputs.price && !!formInputs.date_add;
-    console.log(this.props)
     return (
       <form onSubmit={this.submitHandler} className='form'>
         <Field

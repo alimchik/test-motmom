@@ -4,17 +4,30 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../models/User');
 const autoMiddleware = require('../middleware/autologin.middleware'); 
+const { body, validationResult } = require('express-validator');
 
 const router = Router();
 
-router.post('/registr', async (req, res) => {
+router.post(
+  '/registr',
+  [
+    body('email','Некорректный email').isEmail(),
+    body('password','Минимальная длина пароля 3 символа').isLength({ min: 3 })
+  ],
+  async (req, res) => {
   try {
-    //console.log(req.body)
+    
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.errors[0].msg });
+    }
+
     const { email, password } = req.body;
     const candidat = await User.findOne({ email: email });
     
     if (candidat) {
-      res.status(400).json({ message: 'Такой пользователь уже существует' });
+      return res.status(400).json({ message: 'Такой пользователь уже существует' });
     }
     
     const hashPassword = await bcrypt.hash(password, 8);
@@ -27,8 +40,21 @@ router.post('/registr', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post(
+  '/login',
+  [
+    body('email','Введите корректный email').isEmail().normalizeEmail(),
+    body('password','Минимальная длина пароля 3 символа').isLength({ min: 3 })
+  ], 
+  async (req, res) => {
   try {
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ message: errors.errors[0].msg });
+    }
+
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });

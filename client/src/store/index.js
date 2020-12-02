@@ -106,14 +106,13 @@ class Store {
   }
 
   editProduct = async (field, value, id) => {
-    console.log({ [field]: value })
     let result = []
     try {
       result = await axios.patch(`http://localhost:5000/api/product/${id}`, { [field]: value });
+      toast.success(result.data.message);
     } catch (e) {
       toast.error(e.response.data.message);
     }
-    toast.success(result.data.message);
   }
 
   get isSomeItemSelected() {

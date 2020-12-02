@@ -1,11 +1,11 @@
 import { decorate, observable, action, computed } from 'mobx';
+import { toast } from 'react-toastify';
 import * as _ from 'lodash';
 import axios from 'axios';
 
 class Store {
   products = [];
   inputValue = '';
-  isOpen = false;
   formInputs = {
     name: '',
     count: '',
@@ -20,7 +20,7 @@ class Store {
     try {
       result = await axios.get(url);
     } catch (e) {
-      console.log(e);
+      toast.error(e.response.data.message);
     }
     
     const result2 = result.data.map(item => {
@@ -62,12 +62,13 @@ class Store {
   getProducts = _.debounce(this.getProducts, 200);
 
   addProduct = async () => {
-    let status = null
+    let status = null;
+    let result = [];
     try {
-      const result = await axios.post('http://localhost:5000/api/product/add', this.formInputs);
+      result = await axios.post('http://localhost:5000/api/product/add', this.formInputs);
       status = result.status;
     } catch (e) {
-      console.log(e)
+      toast.error(e.response.data.message);
     }
 
     if (status === 201) {
@@ -75,8 +76,8 @@ class Store {
       this.formInputs.count=''
       this.formInputs.price=''
       this.formInputs.date_add=''
-      this.changeModalVisibility();
       this.getProducts();
+      toast.success(result.data.message);
     }
   }
 
@@ -96,15 +97,12 @@ class Store {
         }
       })
     } catch (e) {
-      console.log(e);
+      toast.error(e.response.data.message);
     }
-    if (result.status) {
+    if (result.status === 200) {
       this.getProducts(this.inputValue);
+      toast.success(result.data.message);
     }
-  }
-
-  changeModalVisibility = () => {
-    this.isOpen = !this.isOpen;
   }
 
   editProduct = async (field, value, id) => {
@@ -113,9 +111,9 @@ class Store {
     try {
       result = await axios.patch(`http://localhost:5000/api/product/${id}`, { [field]: value });
     } catch (e) {
-      console.log(e);
+      toast.error(e.response.data.message);
     }
-    console.log(result);
+    toast.success(result.data.message);
   }
 
   get isSomeItemSelected() {
@@ -127,9 +125,7 @@ class Store {
 Store = decorate(Store, {
   products: observable,
   inputValue: observable,
-  isOpen: observable,
   formInputs: observable,
-  itemChecked: observable,
   getProducts: action,
   updateInputsForm: action,
   updateInput: action,
@@ -138,7 +134,6 @@ Store = decorate(Store, {
   addProduct: action,
   removeProductMulti: action,
   removeProduct: action,
-  changeModalVisibility: action,
   editProduct: action,
   isSomeItemSelected: computed
 })

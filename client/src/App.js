@@ -1,11 +1,13 @@
 import React from 'react';
-import Products from './pages/Products';
-import Auth from './pages/Auth';
-import Modal2 from './components/Modal2';
-import Navbar from './components/Navbar';
-import Form from './components/Form';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import Products from './pages/Products';
+import Auth from './pages/Auth';
+import Modal from './components/Modal';
+import Navbar from './components/Navbar';
+import Form from './components/Form';
 
 @inject('auth')
 @observer
@@ -17,13 +19,13 @@ class App extends React.Component {
 
   render() {
     const { isAuthorized } = this.props.auth;
-    console.log('asdad',isAuthorized);
     return (
       <Router>
           <Navbar isAuthorized={isAuthorized} />
-          {
+          <ToastContainer />
+          { 
             isAuthorized ?
-              <div className='App'>  
+              <div className='App'>
                 <Switch>
                   <Route path='/products'>
                     <Products />
@@ -31,9 +33,9 @@ class App extends React.Component {
                   <Redirect to='/products'/>
                 </Switch>
                 <Route path='/products/add'>
-                  <Modal2 title='Добавить товар'>
+                  <Modal title='Добавить товар'>
                     <Form />
-                  </Modal2>
+                  </Modal>
                 </Route>
               </div>
             : <Switch>

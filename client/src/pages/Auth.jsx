@@ -24,6 +24,7 @@ class Auth extends React.Component {
 
     const { inputs } = this.props.auth;
     const { titel, type } = this.props;
+    
     return (
       <div className='containerr'>
         <div className='form-wrap'>

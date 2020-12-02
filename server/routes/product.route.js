@@ -6,6 +6,14 @@ const router = Router();
 // /api/product/add
 router.post('/add', async (req, res) => {
   try {
+    const { name, count, price, date_add } = req.body;
+
+    const emptyField = !!name && !!count && !!price && !!date_add;
+
+    if (!emptyField) {
+      res.status(400).json({ message: 'Все поля должны быть заполнены' });
+    }
+
     const product = new Product(req.body);
     await product.save();
     res.status(201).json({ message: 'Продукт успешно добавлен' });
@@ -33,17 +41,6 @@ router.get('/', async (req, res) => {
   res.status(200).json(prdct);
 });
 
-
-/*router.delete('/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    await product.remove();
-  } catch (e) {
-    res.status(500).json({ message: 'что-то пошло не так' });
-  }
-  res.status(200).json({ message: 'Запись успешно удалена' });
-});*/
-
 // /api/product/
 router.delete('/', async (req, res) => {
   try {
@@ -52,7 +49,7 @@ router.delete('/', async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: 'что-то пошло не так' });
   }
-  res.status(200).json({ message: 'Запись успешно удалена' });
+  res.status(200).json({ message: 'Запись(и) успешно удалена' });
 });
 
 router.patch('/:id', async (req, res) => {
@@ -62,7 +59,7 @@ router.patch('/:id', async (req, res) => {
   } catch (e) {
     res.status(500).json({ message: 'что-то пошло не так' });
   }
-  res.status(200).json({ message: 'Поле учпешно обновленно' });
+  res.status(200).json({ message: 'Поле успешно обновленно' });
 });
 
 module.exports = router;

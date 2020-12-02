@@ -1,24 +1,25 @@
 .modalOverlay {
-  background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
+  left: 0;
   top: 0;
   bottom: 0;
-  left: 0;
   right: 0;
-
-  .modalWindow {
+  background-color: rgba(0,0,0,.3);
+    
+  .window {
     position: absolute;
-    top: 50%;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
-    background-color: #FFF;
     min-height: 200px;
     width: 600px;
+    box-sizing: border-box;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
-    .modalHeader {
+    
+    .header {
       min-height: 60px;
       border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       display: flex;
@@ -26,22 +27,18 @@
       box-sizing: border-box;
       align-items: center;
       padding: 10px 20px;
-      
-      .modalTitle {
+        
+      .title {
         font-weight: bold;
       }
+  
+      i {
+        color: rgb(0, 0, 0);
 
-      i:hover {
-        color: rgb(175, 15, 15);
-      }
-
+        &:hover {
+         color: rgb(136, 6, 6);
+       }
+     }
     }
-
   }
 }
-
-
-
-
-
-

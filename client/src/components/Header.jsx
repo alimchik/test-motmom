@@ -15,7 +15,10 @@ class Header extends React.Component {
 
   removeProduct = (e) => {
     e.preventDefault()
-    this.props.store.removeProductMulti()
+    let conf = window.confirm('Вы действительно хотите удалить товар?');
+    if (conf) {
+      this.props.store.removeProductMulti();
+    }
   }
 
   render() {

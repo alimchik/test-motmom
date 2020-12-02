@@ -1,4 +1,5 @@
 import { decorate, observable, action } from 'mobx';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 class Auth {
@@ -17,10 +18,10 @@ class Auth {
     try {
       const result = await axios.post('http://localhost:5000/api/auth/registr', this.inputs);
       if (result.status === 201) {
-        alert('Регистрация успешно прошла');
+        toast.success(result.data.message);
       }
     } catch(e) {
-      console.log(e.response.data.message)
+      toast.error(e.response.data.message);
     }
   }
 
@@ -32,7 +33,7 @@ class Auth {
         this.setUser(result.data.user);
       }
     } catch(e) {
-      console.log(e.response.data.message)
+      toast.error(e.response.data.message);
     }
   }
 
@@ -53,7 +54,6 @@ class Auth {
       this.setUser(result.data.user);
       localStorage.setItem('token', result.data.token)
     } catch(e) {
-      console.log(e.response.data.message);
       localStorage.removeItem('token');
     }
   }
@@ -62,10 +62,14 @@ class Auth {
 
 decorate(Auth, {
   isAuthorized: observable,
+  user: observable,
   inputs: observable,
   updateInputsValue: action,
   registr: action,
-  login: action
+  login: action,
+  setUser: action,
+  logout: action,
+  autoLogin: action
 })
 
 export default new Auth();

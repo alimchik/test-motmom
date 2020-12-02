@@ -1,32 +1,35 @@
 import React from 'react';
-
+import { createPortal } from "react-dom";
+import { Link, withRouter } from 'react-router-dom';
 import './Modal.scss';
 
 class Modal extends React.Component {
 
-  render() {
-    const { title, children, isOpen, openModalHandler } = this.props
-    return (
-      <>
-      {
-        isOpen ?
-        <div className="modalOverlay">
-          <div className="modalWindow">
-            <div className="modalHeader">
-              <div className="modalTitle">{title}</div>
-              <span onClick={openModalHandler}>
-                <i className='fas fa-times'></i>
-              </span>
-            </div>
-            <div className="modalBody">
-              {children}
-            </div>
-          </div>
-        </div> : null
-      }
-      </>
-    )
+  closeModal = (e) => {
+    const modalOverlay = document.querySelectorAll('.modalOverlay');
+    if (e.target === modalOverlay[0]){
+      this.props.history.push('/products');
+    }
   }
-};
-
-export default Modal;
+   
+  render() {
+    const { title, children } = this.props
+    return createPortal(
+      <div className="modalOverlay" onClick={this.closeModal}>
+        <div className="window">
+          <div className="header">
+            <div className="title">{title}</div>
+            <Link to='/products'>
+              <i className='fas fa-times'></i>
+            </Link>
+          </div>
+          <div className="body">
+            {children}
+          </div>
+        </div>
+      </div>,
+      document.getElementById("portal"),
+    );
+  }
+}
+export default  withRouter(Modal);
